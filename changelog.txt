@@ -1,3 +1,6 @@
+0.0.9
+- Added forum thread to addon and README files.
+- Added Travis-CI integration support for scraper API testing.
 0.0.8
 - Cleaned up code and documentation.
 - prepared everything for first bump into git repo.
