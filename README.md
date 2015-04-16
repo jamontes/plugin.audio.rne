@@ -34,4 +34,4 @@ Enjoy it!
 
 jamontes
 
-P.S: Dedicated to the memory of Juan Claudio Cifuentes *Cifu* (April 20, 1941 - March 17, 2015) and its 44 years of his programm "Jazz Porque Sí".
+P.S: Dedicated to the memory of Juan Claudio Cifuentes *Cifu* (April 20, 1941 - March 17, 2015) and his 44 years "Jazz Porque Sí" program.

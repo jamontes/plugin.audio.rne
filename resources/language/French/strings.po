@@ -52,8 +52,8 @@ msgstr "Filtre"
 
 msgctxt "#30103"
 msgid "Show only on emission programmes"
-msgstr "Voir seuls les programmes en diffusion"
+msgstr "Montrer seulement les programmes en diffusion"
 
 msgctxt "#30104"
 msgid "Show all the programmes"
-msgstr "Voir tous les programmes"
+msgstr "Montrer tous les programmes"

@@ -1,3 +1,6 @@
+1.0.0
+- Updated version number for official repo bump.
+- Updated french translations (credits: Emil). 
 0.0.9
 - Added forum thread to addon and README files.
 - Added Travis-CI integration support for scraper API testing.
