@@ -1,3 +1,5 @@
+1.0.3 (2016.01.17)
+- Recover all of the direct channels play (credits: vicglez).
 1.0.2 (2015.12.31)
 - Fixed half of the direct channels play (credits: vicglez).
 - Search code vamped due to website changes.
