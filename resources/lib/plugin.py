@@ -8,12 +8,12 @@
    it under the terms of the GNU General Public License as published by
    the Free Software Foundation, either version 3 of the License, or
    (at your option) any later version.
-   
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
-   
+
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -24,7 +24,8 @@
 '''
 
 # First of all We must import all the libraries used for plugin development.
-import sys, urllib, re, os
+import sys, re, os
+from urllib.parse import urlencode, quote_plus, unquote_plus
 import xbmcplugin, xbmcaddon, xbmcgui, xbmcaddon, xbmc
 
 class Plugin():
@@ -35,7 +36,6 @@ class Plugin():
         self.pluginparams = sys.argv[2]
         self.plugin_id = plugin_id
         self.plugin_type = 'Video' if 'video' in plugin_id else 'Music'
-        self.defaultIcon = 'DefaultVideo.png' if self.plugin_type == 'video' else 'DefaultAudio.png'
         self.debug_enable = False # The debug logs are disabled by default.
         self.plugin_settings = xbmcaddon.Addon(id=self.plugin_id)
         self.translation = self.plugin_settings.getLocalizedString
@@ -95,26 +95,26 @@ class Plugin():
         params = sys.argv[2]
 
         pattern_params  = re.compile('[?&]([^=&]+)=?([^&]*)')
-        options = dict((parameter, urllib.unquote_plus(value)) for (parameter, value) in pattern_params.findall(params))
+        options = dict((parameter, unquote_plus(value)) for (parameter, value) in pattern_params.findall(params))
         self._log("get_plugin_parms " + repr(options))
         return options
 
 
     def get_plugin_path(self, **kwars):
         """This method returns the add-on path URL encoded along with all its parameters."""
-        return sys.argv[0] + '?' + urllib.urlencode(kwars)
+        return sys.argv[0] + '?' + urlencode(kwars)
 
 
     def get_url_decoded(self, url):
         """This method returns the URL decoded."""
         self._log('get_url_decoded URL: "%s"' % url)
-        return urllib.unquote_plus(url)
+        return unquote_plus(url)
 
 
     def get_url_encoded(self, url):
         """This method returns the URL encoded."""
         self._log('get_url_encoded URL: "%s"' % url)
-        return urllib.quote_plus(url)
+        return quote_plus(url)
 
 
     def set_view_mode(self, viewid):
@@ -137,7 +137,7 @@ class Plugin():
     def get_keyboard_text(self, prompt):
         """This method gets an input text from the keyboard."""
         self._log('get_keyboard_text prompt: "%s"' % prompt)
-    
+
         keyboard = xbmc.Keyboard('', prompt)
         keyboard.doModal()
         if keyboard.isConfirmed() and keyboard.getText():
@@ -153,11 +153,10 @@ class Plugin():
         """This method adds the list of items (links and folders) to the add-on media list."""
         item_list = []
         for item in items:
-            link_item = xbmcgui.ListItem(
-                        item.get('info').get('title'),
-                        iconImage = self.defaultIcon if item.get('IsPlayable', False) else "DefaultFolder.png",
-                        thumbnailImage = item.get('thumbnail', ''),
-                        )
+            link_item = xbmcgui.ListItem(item.get('info').get('title'))
+            thumbnailImage = item.get('thumbnail', '')
+            if thumbnailImage:
+                link_item.setArt({ 'thumb': thumbnailImage })
             if item.get('IsPlayable', False):
                 link_item.setProperty('IsPlayable', 'true')
             link_item.setLabel(item.get('label', item.get('info').get('title')))

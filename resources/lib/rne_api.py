@@ -3,17 +3,17 @@
 '''
    RNE Podcasts API lib: library functions for RNE Podcast audio add-on.
    Copyright (C) 2015 José Antonio Montes (jamontes)
-   
+
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
    the Free Software Foundation, either version 3 of the License, or
    (at your option) any later version.
-   
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
-   
+
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -23,84 +23,13 @@
    Release 0.1.6
 '''
 
-import lutil as l
+import resources.lib.lutil as l
 
 root_url = 'se.evtr.www//:sptth'[::-1]
 
 def set_debug(debug_flag, func_log=l.local_log):
     """This function is a wrapper to setup the debug flag into the lutil module"""
     l.set_debug_mode(debug_flag, func_log)
-
-
-def get_clean_title(title):
-    """This function returns the title or desc cleaned.
-       ref: http://www.thesauruslex.com/typo/eng/enghtml.htm"""
-
-    return title.\
-        replace('&aacute;',   'á').\
-        replace('&agrave;',   'á').\
-        replace('&eacute;',   'é').\
-        replace('&egrave;',   'è').\
-        replace('&iacute;',   'í').\
-        replace('&oacute;',   'ó').\
-        replace('&ograve;',   'ò').\
-        replace('&uacute;',   'ú').\
-        replace('&auml;',     'ä').\
-        replace('&iuml;',     'ï').\
-        replace('&ouml;',     'ö').\
-        replace('&uuml;',     'ü').\
-        replace('&szlig;',    'ß').\
-        replace('&ntilde;',   'ñ').\
-        replace('&ccedil;',   'ç').\
-        replace('&Aacute;',   'Á').\
-        replace('&Agrave;',   'À').\
-        replace('&Eacute;',   'É').\
-        replace('&Egrave;',   'È').\
-        replace('&Iacute;',   'Í').\
-        replace('&Oacute;',   'Ó').\
-        replace('&Ograve;',   'Ò').\
-        replace('&Uacute;',   'Ú').\
-        replace('&Auml;',     'Ä').\
-        replace('&Iuml;',     'Ï').\
-        replace('&Ouml;',     'Ö').\
-        replace('&Uuml;',     'Ü').\
-        replace('&Ntilde;',   'Ñ').\
-        replace('&Ccedil;',   'Ç').\
-        replace('&#034;',     '"').\
-        replace('&#34;',      '"').\
-        replace('&#039;',     "´").\
-        replace('&#39;',      "´").\
-        replace('&#160;',     " ").\
-        replace('&#8211;',     '').\
-        replace('&#8217;',    "'").\
-        replace('&#8220;',    '"').\
-        replace('&#8221;',    '"').\
-        replace('&#8223;',    "'").\
-        replace('&#8230;',     '').\
-        replace('&rsquo;',    "´").\
-        replace('&laquo;',    '"').\
-        replace('&ldquo;',    '"').\
-        replace('&raquo;',    '"').\
-        replace('&rdquo;',    '"').\
-        replace('&iexcl;',    '¡').\
-        replace('&iinte;',    '¿').\
-        replace('&amp;',      '&').\
-        replace('&nbsp;',      '').\
-        replace('&quot;',     '"').\
-        replace('&ordf',      'ª').\
-        replace('&ordm',      'º').\
-        replace('&middot;',   '·').\
-        replace('&hellip;', '...').\
-        replace('<br />',      '').\
-        replace('<b>',         '').\
-        replace('</b>',        '').\
-        replace('<p>',         '').\
-        replace('</p>',        '').\
-        replace('<em>',       "'").\
-        replace('</em>',      "'").\
-        replace('<strong>',    '').\
-        replace('</strong>',   '').\
-        strip()
 
 
 def get_channels_menu(html_channels):
@@ -136,7 +65,7 @@ def get_create_index():
         url, title = l.find_first(buffer_url, pattern) or ('', '')
         menu_item = {
                 'action' : action,
-                'title'  : get_clean_title(title),
+                'title'  : l.clean_title(title),
                 'args'   : root_url + url,
                 }
         menu_entries.append(menu_item)
@@ -278,11 +207,11 @@ def get_audio_list(program_url, localized=lambda x: x):
         audio_entry       = {
                 'url'        : url + url_options,
                 'title'      : "%s (%s)" % (
-                                get_clean_title(title),
+                                l.clean_title(title),
                                 date,
                                ),
                 'comment'    : "%s\n%s - %s - %s" % (
-                                get_clean_title(desc),
+                                l.clean_title(desc),
                                 duration,
                                 date,
                                 rtlabel,
@@ -408,17 +337,17 @@ def get_search_list(search_url, localized=lambda x: x):
 
     for search_section in buffer_url.split(search_section_sep)[1:]:
         year              = l.find_first(search_section, search_year_pattern)
-        title             = l.find_first(search_section, search_title_pattern).strip()
-        desc              = l.find_first(search_section, search_desc_pattern).strip()
+        title             = l.find_first(search_section, search_title_pattern)
+        desc              = l.find_first(search_section, search_desc_pattern)
         url               = l.find_first(search_section, search_link_pattern)
 
         l.log('Podcast info. url: "%s"  title: "%s"' % (
-                url, get_clean_title(title)))
+                url, l.clean_title(title)))
 
         search_entry      = {
                 'url'        : url,
-                'title'      : get_clean_title(title),
-                'comment'    : get_clean_title(desc.replace('&amp;', '&')),
+                'title'      : l.clean_title(title),
+                'comment'    : l.clean_title(desc),
                 'year'       : year,
                 'action'     : 'play_search',
                 'IsPlayable' : True,
